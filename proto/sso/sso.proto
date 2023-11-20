@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package auth; //пространство имен, чтобы не было конфликтов
+
+option go_package = "melnikov.sso.v1;ssov1"; // для генерации кода на go
+
+//описываем внутренний отдельный сервис sso
+service Auth {
+    rpc Register (RegisterRequest) returns (RegisterResponse); //метод
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc IsAdmin (IsAdminRequest) returns (IsAdminResponse);
+}
+//что запрос принимает
+message RegisterRequest {
+    string email = 1; //Email of the user to register
+    string password = 2; //Password of the user to register
+}
+// что запрос возвращает
+message RegisterResponse {
+    int64 user_id = 1; // user ID of the registered user
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+    int32 app_id = 3; // ID of the app to login
+}
+
+message LoginResponse {
+    string token = 1;
+}
+
+message IsAdminRequest {
+    int64 user_id = 1; 
+}
+
+message IsAdminResponse {
+    bool is_admin = 1; //indicates wheter the user is an admin
+}
